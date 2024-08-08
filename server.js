@@ -19,25 +19,29 @@ const foodIcon = ["🍇", "🍈", "🍉", "🍊", "🍋", "🍌", "🍍", "🥭"
 const facesIcon = ["😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "🙃", "😉", "😊", "😇", "🥰", "😍", "🤩", "😘", "😗", "😚", "😙", "😋", "😛", "😜", "🤪"];
 const flagsIcon = [];
 
-app.get('/cards/:difficulty:difficulty/:theme', (request, response) => {
+app.get('/cards/:difficulty/:theme', (request, response) => {
     console.log('difficulty', request.params.difficulty);
     console.log('theme', request.params.theme);
 
+    let cards = [];
+
     if (request?.params?.theme && request?.params?.difficulty) {
         const difficulty = request.params.difficulty;
-        let cardIcons = [];
-    }
-    switch (request.params.theme) {
-        case THEME_TYPE.FOOD:
-            cards = getCardFromIconList(foodIcon, difficulty);
-            break;
-        case THEME_TYPE.FACES:
-            cards = getCardFromIconList(facesIcon, difficulty);
-            break;
+        
+        
+        switch (request.params.theme) {
+            case THEME_TYPE.FOOD:
+                cards = getCardFromIconList(foodIcon, difficulty);
+                break;
+            case THEME_TYPE.FACES:
+                cards = getCardFromIconList(facesIcon, difficulty);
+                break;
 
-        default:
-            break;
+            default:
+                break;
+        }
     }
+
 
 
     response.send(JSON.stringify({'cards': cards}));
@@ -50,7 +54,7 @@ function getCardFromIconList(list, quantity) {
 
     for (let i = 0; i < quantity; i++) {
         let iconIndex = generateRandomIndex(0, (list.length - 1));
-        let icon = list(iconIndex);
+        let icon = list[iconIndex];
         let card = {
             "isDiscovered": false,
             "icon": icon,

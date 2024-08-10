@@ -28,7 +28,7 @@ app.get('/cards/:difficulty/:themes', (request, response) => {
 
     let cards = [];
 
-    if (request?.params?.theme && request?.params?.difficulty) {
+    if (request?.params?.themes && request?.params?.difficulty) {
         const difficulty = request.params.difficulty;
         
         

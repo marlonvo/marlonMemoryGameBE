@@ -32,7 +32,7 @@ app.get('/cards/:difficulty/:themes', (request, response) => {
         const difficulty = request.params.difficulty;
         
         
-        switch (request.params.theme) {
+        switch (request.params.themes) {
             case THEME_TYPE.FOOD:
                 cards = getCardFromIconList(foodIcon, difficulty);
                 break;

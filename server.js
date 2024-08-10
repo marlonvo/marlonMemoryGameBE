@@ -22,9 +22,9 @@ const facesIcon = ["😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂
 const flagsIcon = ["🍇", "🍈", "🍉", "🍊", "🍋", "🍌", "🍍", "🥭", "🍎", "🍏", "🍐", "🍑", "🍒", "🍓", "🥝", "🍅", "🍩"];
 const animalsImage =['IMG_1.jpg','IMG_2.jpg','IMG_3.jpg','IMG_4.jpg','IMG_5.jpg','IMG_6.jpg','IMG_7.jpg','IMG_8.jpg'];
 
-app.get('/cards/:difficulty/:theme', (request, response) => {
+app.get('/cards/:difficulty/:themes', (request, response) => {
     console.log('difficulty', request.params.difficulty);
-    console.log('theme', request.params.theme);
+    console.log('themes', request.params.themes);
 
     let cards = [];
 

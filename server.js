@@ -7,17 +7,20 @@ app.use(cors());
 const food = 'FOOD';
 const faces = 'FACES';
 const flags = 'FLAGS';
+const animals = 'ANIMALS';
 
 const THEME_TYPE = {
     FOOD: food,
     FACES: faces,
-    FLAGS: flags
+    FLAGS: flags,
+    ANIMALS: animals
 
 }
 
 const foodIcon = ["🍇", "🍈", "🍉", "🍊", "🍋", "🍌", "🍍", "🥭", "🍎", "🍏", "🍐", "🍑", "🍒", "🍓", "🥝", "🍅", "🍩"];
 const facesIcon = ["😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "🙃", "😉", "😊", "😇", "🥰", "😍", "🤩", "😘", "😗", "😚", "😙", "😋", "😛", "😜", "🤪"];
-const flagsIcon = [];
+const flagsIcon = ["🍇", "🍈", "🍉", "🍊", "🍋", "🍌", "🍍", "🥭", "🍎", "🍏", "🍐", "🍑", "🍒", "🍓", "🥝", "🍅", "🍩"];
+const animalsImage =['IMG_1.jpg','IMG_2.jpg','IMG_3.jpg','IMG_4.jpg','IMG_5.jpg','IMG_6.jpg','IMG_7.jpg','IMG_8.jpg'];
 
 app.get('/cards/:difficulty/:theme', (request, response) => {
     console.log('difficulty', request.params.difficulty);
@@ -36,6 +39,12 @@ app.get('/cards/:difficulty/:theme', (request, response) => {
             case THEME_TYPE.FACES:
                 cards = getCardFromIconList(facesIcon, difficulty);
                 break;
+            case THEME_TYPE.FACES:
+                cards = getCardFromIconList(flagsIcon, difficulty);
+                break;
+            case THEME_TYPE.ANIMALS:
+                cards = getCardFromIconList(animalsImage, difficulty);
+                break;
 
             default:
                 break;
@@ -50,11 +59,16 @@ app.get('/cards/:difficulty/:theme', (request, response) => {
 
 function getCardFromIconList(list, quantity) {
 
+    let iconIndexes = []
+    for (let i = 0; i < quantity; i++) {
+        let iconIndex = getUniqueIndex(0,list.length, iconIndexes);
+        iconIndexes.push(iconIndex)
+    }
+
     let cards = []
 
-    for (let i = 0; i < quantity; i++) {
-        let iconIndex = generateRandomIndex(0, (list.length - 1));
-        let icon = list[iconIndex];
+    for (let i = 0; i < iconIndexes.length; i++) {
+        let icon = list[iconIndexes[i]];
         let card = {
             "isDiscovered": false,
             "icon": icon,
@@ -72,6 +86,19 @@ function getCardFromIconList(list, quantity) {
     console.log (cardsConcatenated);
 
     return cards
+}
+
+function getUniqueIndex(min, max, iconIndexes) {
+    const newIndex = generateRandomIndex(min , max);
+
+    for (let i = 0; i < iconIndexes.length; i++) {
+        if (newIndex === iconIndexes[i]){
+            return getUniqueIndex(min, max, iconIndexes)
+        }
+        
+    }
+
+    return newIndex;
 }
 
 function generateRandomIndex(min, max) {

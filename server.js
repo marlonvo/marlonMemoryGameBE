@@ -22,17 +22,17 @@ const facesIcon = ["😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂
 const flagsIcon = ["🍇", "🍈", "🍉", "🍊", "🍋", "🍌", "🍍", "🥭", "🍎", "🍏", "🍐", "🍑", "🍒", "🍓", "🥝", "🍅", "🍩"];
 const animalsImage =['IMG_1.jpg','IMG_2.jpg','IMG_3.jpg','IMG_4.jpg','IMG_5.jpg','IMG_6.jpg','IMG_7.jpg','IMG_8.jpg'];
 
-app.get('/cards/:difficulty/:themes', (request, response) => {
+app.get('/cards/:difficulty/:theme', (request, response) => {
     console.log('difficulty', request.params.difficulty);
-    console.log('themes', request.params.themes);
+    console.log('theme', request.params.theme);
 
     let cards = [];
 
-    if (request?.params?.themes && request?.params?.difficulty) {
+    if (request?.params?.theme && request?.params?.difficulty) {
         const difficulty = request.params.difficulty;
         
         
-        switch (request.params.themes) {
+        switch (request.params.theme) {
             case THEME_TYPE.FOOD:
                 cards = getCardFromIconList(foodIcon, difficulty);
                 break;
@@ -49,6 +49,7 @@ app.get('/cards/:difficulty/:themes', (request, response) => {
             default:
                 break;
         }
+        console.log(cards);
     }
 
 
@@ -65,7 +66,7 @@ function getCardFromIconList(list, quantity) {
         iconIndexes.push(iconIndex)
     }
 
-    let cards = []
+    let cards = [];
 
     for (let i = 0; i < iconIndexes.length; i++) {
         let icon = list[iconIndexes[i]];
@@ -79,7 +80,7 @@ function getCardFromIconList(list, quantity) {
     }
 
     let cardDuplicate = cards.slice();
-    shuffle(cards)
+    shuffle(cards);
     console.log (cardDuplicate);
 
     let cardsConcatenated = cards.concat(cardDuplicate);
@@ -118,8 +119,15 @@ function shuffle(array) {
       // And swap it with the current element.
       [array[currentIndex], array[randomIndex]] = [
         array[randomIndex], array[currentIndex]];
+
     }
+
   }
+
+  // Used like so
+  let arr = [2, 11, 37, 42];
+  shuffle(arr);
+  console.log(arr);
 
 app.listen(port, () => {
     console.log('MemoryGameBE running');

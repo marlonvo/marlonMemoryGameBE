@@ -125,9 +125,9 @@ function shuffle(array) {
   }
 
   // Used like so
-  let arr = [2, 11, 37, 42];
-  shuffle(arr);
-  console.log(arr);
+  //let arr = [2, 11, 37, 42];
+  //shuffle(arr);
+  //console.log(arr);
 
 app.listen(port, () => {
     console.log('MemoryGameBE running');

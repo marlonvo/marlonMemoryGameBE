@@ -60,10 +60,10 @@ app.get('/cards/:difficulty/:theme', (request, response) => {
 
 function getCardFromIconList(list, quantity) {
 
-    let iconIndexes = []
+    let iconIndexes = [];
     for (let i = 0; i < quantity; i++) {
         let iconIndex = getUniqueIndex(0,list.length, iconIndexes);
-        iconIndexes.push(iconIndex)
+        iconIndexes.push(iconIndex);
     }
 
     let cards = [];
@@ -79,12 +79,9 @@ function getCardFromIconList(list, quantity) {
         cards.push(card);
     }
 
-    let cardDuplicate = cards.slice();
+    let cardsDuplicate = cards.slice();
+    cards = cards.concat(cardsDuplicate)
     shuffle(cards);
-    console.log (cardDuplicate);
-
-    let cardsConcatenated = cards.concat(cardDuplicate);
-    console.log (cardsConcatenated);
 
     return cards
 }

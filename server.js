@@ -1,8 +1,15 @@
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser')
 const app = express();
 const port = 3000;
+const axios = require('axios');
 app.use(cors());
+
+app.use(bodyParser.urlencoded({ extended: true}));
+app.use(bodyParser.json());
+app.use(bodyParser.raw());
+
 
 const food = 'FOOD';
 const faces = 'FACES';
@@ -19,11 +26,54 @@ const THEME_TYPE = {
 
 const foodIcon = ["🍇", "🍈", "🍉", "🍊", "🍋", "🍌", "🍍", "🥭", "🍎", "🍏", "🍐", "🍑", "🍒", "🍓", "🥝", "🍅", "🍩"];
 const facesIcon = ["😀", "😃", "😄", "😁", "😆", "😅", "🤣", "😂", "🙂", "🙃", "😉", "😊", "😇", "🥰", "😍", "🤩", "😘", "😗", "😚", "😙", "😋", "😛", "😜", "🤪"];
-const flagsIcon = ["🍇", "🍈", "🍉", "🍊", "🍋", "🍌", "🍍", "🥭", "🍎", "🍏", "🍐", "🍑", "🍒", "🍓", "🥝", "🍅", "🍩"];
+//const flagsIcon = ['🇨🇱','🇨🇲','🇨🇳','🇨🇴','🇨🇵','🇨🇷','🇨🇺','🇨🇻','🇨🇼','🇵🇰'];
 const animalsImage =['IMG_1.jpg','IMG_2.jpg','IMG_3.jpg','IMG_4.jpg','IMG_5.jpg','IMG_6.jpg','IMG_7.jpg','IMG_8.jpg'];
 
+const databaseURL = 'https://marlonmemorygame-default-rtdb.firebaseio.com/scores.json';
+
+app.post('/score', (request, response) => {
+	let body = [];
+	request.on('data', (chunk) => {
+		body.push(chunk);
+	}).on('end', () => {
+		const jsonData = Buffer.concat(body).toString();
+		if (jsonData !== undefined) {
+			const score = JSON.parse(jsonData);
+
+			if (score !== undefined &&
+				score.clicks !== undefined &&
+				score.time !== undefined &&
+				score.score !== undefined&&
+				score.username !== undefined &&
+				score.difficulty !== undefined) {
+
+				axios.post(databaseURL, score).then(function (result) {
+					response.send('Score saved!');
+				}).catch(function (error) {
+					response.send(error);
+				});
+
+			} else {
+				response.send('Some data in score undefined or null!');
+			}
+		} else {
+			response.send('request.body undefined or null!');
+		}
+	});
+});
+
 app.get('/scores',(request , response ) =>{
-    response.send(JSON.stringify(scoresData));
+
+    axios.get(databaseURL)
+        .then(function (res) {
+        response.send(res.data);
+    })
+    .catch(function (error) {
+        response.send(JSON.stringify({error:'Error requestion scores'}));
+    })
+    .finally(function () {
+    });
+
 });
 
 
@@ -135,78 +185,5 @@ app.listen(port, () => {
     console.log('MemoryGameBE running');
 });
 
-const scoresData = {
-    "scores": [
-        {
-            "difficulty": 4,
-            "clicks": 14,
-            "score": 25,
-            "time": 11,
-            "username": "coco"
-        },
-        {
-            "difficulty": 4,
-            "clicks": 16,
-            "score": 30,
-            "time": 14,
-            "username": "koko"
-        },
-        {
-            "difficulty": 4,
-            "clicks": 20,
-            "score": 47,
-            "time": 27,
-            "username": "Esteban"
-        },
-        {
-            "difficulty": 4,
-            "clicks": 36,
-            "score": 121,
-            "time": 85,
-            "username": "Superman"
-        },
-        {
-            "difficulty": 4,
-            "clicks": 56,
-            "score": 123,
-            "time": 67,
-            "username": "tico"
-        },
-        {
-            "difficulty": 4,
-            "clicks": 66,
-            "score": 151,
-            "time": 85,
-            "username": "oscar"
-        },
-        {
-            "difficulty": 4,
-            "clicks": 70,
-            "score": 172,
-            "time": 102,
-            "username": "Superman"
-        },
-        {
-            "difficulty": 4,
-            "clicks": 72,
-            "score": 185,
-            "time": 113,
-            "username": "Benjamin"
-        },
-        {
-            "difficulty": 4,
-            "clicks": 98,
-            "score": 218,
-            "time": 120,
-            "username": "Nath"
-        },
-        {
-            "difficulty": 4,
-            "clicks": 134,
-            "score": 1373,
-            "time": 1239,
-            "username": "Fabian"
-        }
-    ]
-}
+
 
